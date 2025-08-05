@@ -81,6 +81,6 @@ jobs:
         run: |
           sf project deploy start --manifest manifest/package.xml --target-org scratch-org --test-level RunLocalTests --wait 40
 
-      - name: Cleanup Scratch Org
-        if: always()
-        run: sf org delete scratch --target-org scratch-org --no-prompt
+    #   - name: Cleanup Scratch Org
+    #     if: always()
+    #     run: sf org delete scratch --target-org scratch-org --no-prompt
