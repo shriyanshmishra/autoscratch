@@ -33,6 +33,9 @@ jobs:
           echo "$SERVER_KEY" > server.key
           chmod 600 server.key
 
+      - name: Make scripts executable
+        run: chmod +x scripts/*.sh
+
       - name: Authenticate to Dev Hub
         env:
           CLIENT_ID: ${{ secrets.DEVHUB_CLIENT_ID }}
