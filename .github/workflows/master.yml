@@ -1,0 +1,83 @@
+name: Feature Branch Scratch Org CI
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+  pull_request:
+    branches:
+      - 'feature/**'
+
+jobs:
+  scratch-org-validate-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Salesforce CLI
+        run: npm install @salesforce/cli@latest --global
+
+      - name: Write JWT key to file
+        env:
+          SERVER_KEY: ${{ secrets.SERVER_KEY }}
+        run: |
+          echo "$SERVER_KEY" > server.key
+          chmod 600 server.key
+
+      - name: Authenticate to Dev Hub
+        env:
+          CLIENT_ID: ${{ secrets.DEVHUB_CLIENT_ID }}
+          SF_USERNAME: ${{ secrets.DEVHUB_SF_USERNAME }}
+          SF_INSTANCE_URL: ${{ secrets.DEVHUB_SF_INSTANCE_URL }}
+        run: ./scripts/qa-authentication.sh
+
+      - name: Calculate changed files (git diff)
+        run: |
+          git fetch origin main
+          git diff --name-only origin/main...HEAD > changed_files.txt
+          grep '^force-app/main/default/' changed_files.txt > filtered_changed_files.txt || true
+
+      - name: Create manifest/package.xml
+        run: |
+          mkdir -p manifest
+          node scripts/generate-package-xml.js filtered_changed_files.txt manifest/package.xml
+
+      - name: Create scratch org
+        run: |
+          sf org create scratch -f config/project-scratch-def.json -a scratch-org -d --set-default --duration-days 1 --wait 10 --target-dev-hub myqaorg
+
+      - name: Output scratch org credentials
+        run: |
+          echo "::group::Scratch Org Credentials"
+          sf org display --target-org scratch-org --verbose
+          echo "::endgroup::"
+          echo "To login via browser: "
+          sf org open --target-org scratch-org --url-only
+
+      - name: Validate Deployment (check-only)
+        id: validate
+        run: |
+          if grep -q "<types>" manifest/package.xml; then
+            sf project deploy validate --manifest manifest/package.xml --target-org scratch-org --test-level RunLocalTests --wait 40
+          else
+            echo "No Salesforce metadata changes detected. Skipping validation."
+            exit 0
+          fi
+
+      - name: Deploy to Scratch Org (if validation succeeded)
+        if: steps.validate.outcome == 'success'
+        run: |
+          sf project deploy start --manifest manifest/package.xml --target-org scratch-org --test-level RunLocalTests --wait 40
+
+      - name: Cleanup Scratch Org
+        if: always()
+        run: sf org delete scratch --target-org scratch-org --no-prompt
