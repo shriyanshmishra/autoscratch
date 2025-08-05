@@ -36,11 +36,11 @@ jobs:
       - name: Make scripts executable
         run: chmod +x scripts/*.sh
 
-      - name: Authenticate to Dev Hub
+      - name: Authenticate to Salesforce
         env:
-          CLIENT_ID: ${{ secrets.DEVHUB_CLIENT_ID }}
-          SF_USERNAME: ${{ secrets.DEVHUB_SF_USERNAME }}
-          SF_INSTANCE_URL: ${{ secrets.DEVHUB_SF_INSTANCE_URL }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          SF_USERNAME: ${{ secrets.SF_USERNAME }}
+          SF_INSTANCE_URL: ${{ secrets.SF_INSTANCE_URL }}
         run: ./scripts/qa-authentication.sh
 
       - name: Calculate changed files (git diff)
