@@ -54,6 +54,13 @@ jobs:
           mkdir -p manifest
           node scripts/generate-package-xml.js filtered_changed_files.txt manifest/package.xml
 
+      - name: Show package.xml content
+        run: |
+          echo "===== Generated package.xml content ====="
+          cat manifest/package.xml
+          echo "========================================="
+
+
       - name: Create scratch org
         run: |
           sf org create scratch -f config/project-scratch-def.json -a scratch-org -d --set-default --duration-days 1 --wait 10 --target-dev-hub myqaorg
