@@ -5,10 +5,18 @@
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
    <description>My Custom Apex Rules</description>
 
-   <!-- Use category references instead of file paths -->
+   <!-- Apex rules using category references -->
    <rule ref="category/apex/bestpractices.xml"/>
    <rule ref="category/apex/codestyle.xml"/>
    <rule ref="category/apex/security.xml"/>
+   <rule ref="category/apex/errorprone.xml"/>
+   <rule ref="category/apex/performance.xml"/>
 
-   <!-- You can add custom rules here as needed -->
+   <!-- You can exclude specific rules if needed -->
+   <rule ref="category/apex/bestpractices.xml/ApexUnitTestClassShouldHaveAsserts">
+       <properties>
+           <property name="xpath" value="false"/>
+       </properties>
+   </rule>
+
 </ruleset>
