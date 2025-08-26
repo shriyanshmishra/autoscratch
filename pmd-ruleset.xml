@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset name="Custom Apex Ruleset" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0">
+<ruleset name="Custom Apex Ruleset" 
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
    <description>My Custom Apex Rules</description>
 
-   <!-- Reference built-in Apex rule sets or individual rules -->
-   <rule ref="rulesets/apex/cleancode.xml"/>
-   <rule ref="rulesets/apex/codestyle.xml"/>
-   <rule ref="rulesets/apex/security.xml"/>
+   <!-- Use category references instead of file paths -->
+   <rule ref="category/apex/bestpractices.xml"/>
+   <rule ref="category/apex/codestyle.xml"/>
+   <rule ref="category/apex/security.xml"/>
 
    <!-- You can add custom rules here as needed -->
 </ruleset>
