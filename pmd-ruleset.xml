@@ -3,16 +3,26 @@
          xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
    <description>My Custom Apex Rules</description>
 
    <!-- Apex rules using category references -->
-   <rule ref="category/apex/bestpractices.xml"/>
+   <rule ref="category/apex/bestpractices.xml">
+       <!-- Exclude the rule here so it doesn't get duplicated -->
+       <exclude name="ApexUnitTestClassShouldHaveAsserts"/>
+   </rule>
+
    <rule ref="category/apex/codestyle.xml"/>
    <rule ref="category/apex/security.xml"/>
    <rule ref="category/apex/errorprone.xml"/>
    <rule ref="category/apex/performance.xml"/>
 
-   <!-- You can exclude specific rules if needed -->
-   <rule ref="category/apex/bestpractices.xml/ApexUnitTestClassShouldHaveAsserts"/>
+   <!-- Add the specific rule back if you want to customize it -->
+   <rule ref="category/apex/bestpractices.xml/ApexUnitTestClassShouldHaveAsserts">
+       <!-- Example: you can override properties here -->
+       <!-- <properties>
+           <property name="someProperty" value="customValue"/>
+       </properties> -->
+   </rule>
 
 </ruleset>
