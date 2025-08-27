@@ -13,10 +13,6 @@
    <rule ref="category/apex/performance.xml"/>
 
    <!-- You can exclude specific rules if needed -->
-   <rule ref="category/apex/bestpractices.xml/ApexUnitTestClassShouldHaveAsserts">
-       <properties>
-           <property name="xpath" value="false"/>
-       </properties>
-   </rule>
+   <rule ref="category/apex/bestpractices.xml/ApexUnitTestClassShouldHaveAsserts"/>
 
 </ruleset>
